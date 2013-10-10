@@ -24,6 +24,8 @@ package org.strategoxt.imp.testing.strategies;
         		   testlistener_start_testcase_0_2.instance,
         		   testlistener_finish_testcase_0_3.instance,
         		   parse_spt_file_0_0.instance,
-        		   get_completion_input_term_0_1.instance });
+        		   get_completion_input_term_0_1.instance,
+        		   get_observer_0_1.instance,
+        		   get_reference_resolvers_0_1.instance });
          }
        }

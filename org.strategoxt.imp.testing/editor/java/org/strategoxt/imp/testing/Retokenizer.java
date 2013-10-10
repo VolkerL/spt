@@ -20,8 +20,8 @@ import org.spoofax.jsglr.client.imploder.ITokenizer;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.jsglr.client.imploder.Token;
 import org.spoofax.jsglr.client.imploder.Tokenizer;
+import org.spoofax.sunshine.Environment;
 import org.spoofax.terms.TermVisitor;
-import org.strategoxt.imp.runtime.Environment;
 
 /** 
  * @author Lennart Kats <lennart add lclnet.nl>
@@ -29,7 +29,7 @@ import org.strategoxt.imp.runtime.Environment;
 public class Retokenizer {
 	
 	private static final IStrategoConstructor QUOTEPART_1 =
-		Environment.getTermFactory().makeConstructor("QuotePart", 1);
+		Environment.INSTANCE().termFactory.makeConstructor("QuotePart", 1);
 	
 	private final Tokenizer oldTokenizer;
 	

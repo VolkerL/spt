@@ -9,15 +9,12 @@ import static org.spoofax.jsglr.client.imploder.ImploderAttachment.getRightToken
 import static org.spoofax.jsglr.client.imploder.ImploderAttachment.getTokenizer;
 import static org.spoofax.terms.Term.tryGetConstructor;
 import static org.spoofax.terms.attachments.ParentAttachment.getParent;
-import static org.strategoxt.imp.runtime.dynamicloading.TermReader.findTerm;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.imp.model.ISourceProject;
-import org.eclipse.imp.parser.IParseController;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoList;
@@ -28,15 +25,15 @@ import org.spoofax.jsglr.client.imploder.Token;
 import org.spoofax.jsglr.shared.BadTokenException;
 import org.spoofax.jsglr.shared.SGLRException;
 import org.spoofax.jsglr.shared.TokenExpectedException;
+import org.spoofax.sunshine.Environment;
+import org.spoofax.sunshine.parser.model.IParserConfig;
+import org.spoofax.sunshine.parser.model.ParserConfig;
+import org.spoofax.sunshine.services.language.ALanguage;
+import org.spoofax.sunshine.services.parser.JSGLRI;
+import org.spoofax.sunshine.services.parser.SourceAttachment;
+import org.spoofax.sunshine.util.StrategoImpUtil;
 import org.spoofax.terms.StrategoListIterator;
 import org.spoofax.terms.TermVisitor;
-import org.strategoxt.imp.runtime.Environment;
-import org.strategoxt.imp.runtime.dynamicloading.BadDescriptorException;
-import org.strategoxt.imp.runtime.dynamicloading.Descriptor;
-import org.strategoxt.imp.runtime.dynamicloading.DynamicParseController;
-import org.strategoxt.imp.runtime.parser.JSGLRI;
-import org.strategoxt.imp.runtime.parser.SGLRParseController;
-import org.strategoxt.imp.runtime.stratego.SourceAttachment;
 import org.strategoxt.lang.WeakValueHashMap;
 
 /** 
@@ -47,22 +44,21 @@ public class FragmentParser {
 	private static final boolean ALLOW_CACHING = false; // currently useless; plus it breaks setup sections at end of file
 	
 	private static final int FRAGMENT_PARSE_TIMEOUT = 3000;
-	private static final int FRAGMENT_DISAMBIGUATE_TIMEOUT = 1000;
 	
 	private static final IStrategoConstructor FAILS_PARSING_0 =
-		Environment.getTermFactory().makeConstructor("FailsParsing", 0);
+		Environment.INSTANCE().termFactory.makeConstructor("FailsParsing", 0);
 	
 	private static final IStrategoConstructor SETUP_3 =
-		Environment.getTermFactory().makeConstructor("Setup", 3);
+		Environment.INSTANCE().termFactory.makeConstructor("Setup", 3);
 
 	private static final IStrategoConstructor TARGET_SETUP_3 =
-		Environment.getTermFactory().makeConstructor("TargetSetup", 3);
+		Environment.INSTANCE().termFactory.makeConstructor("TargetSetup", 3);
 
 	private static final IStrategoConstructor OUTPUT_4 =
-		Environment.getTermFactory().makeConstructor("Output", 4);
+		Environment.INSTANCE().termFactory.makeConstructor("Output", 4);
 	
 	private static final IStrategoConstructor QUOTEPART_1 =
-		Environment.getTermFactory().makeConstructor("QuotePart", 1);
+		Environment.INSTANCE().termFactory.makeConstructor("QuotePart", 1);
 	
 	private static final int EXCLUSIVE = 1;
 
@@ -70,13 +66,14 @@ public class FragmentParser {
 
 	private final IStrategoConstructor topsort_1;
 
+	// used to check if the FragmentParser was already configured for this ALanguage
+	private ALanguage parseCacheLanguage;
+	
 	private final WeakValueHashMap<String, IStrategoTerm> failParseCache =
 		new WeakValueHashMap<String, IStrategoTerm>();
 	
 	private final WeakValueHashMap<String, IStrategoTerm> successParseCache =
 		new WeakValueHashMap<String, IStrategoTerm>();
-	
-	private Descriptor parseCacheDescriptor;
 	
 	private JSGLRI parser;
 
@@ -89,19 +86,15 @@ public class FragmentParser {
 		assert topsort_1.getArity() == 1;
 		this.setup_3 = setup_3;
 		this.topsort_1 = topsort_1;
+		parseCacheLanguage = null;
 	}
 
-	public void configure(Descriptor descriptor, IPath path, ISourceProject project, IStrategoTerm ast) {
-		if (parseCacheDescriptor != descriptor) {
-			parseCacheDescriptor = descriptor;
-			parser = getParser(descriptor, path, project);
+	public void configure(ALanguage lang, File sptFile, IStrategoTerm ast) {
+		if (parseCacheLanguage != lang) {
+			parseCacheLanguage = lang;
+			parser = getParser(lang, sptFile, ast);
 			failParseCache.clear();
 			successParseCache.clear();
-		}
-		if (parser != null) {
-			// parser may be null if language could not be loaded, see getParser
-			IStrategoTerm start = findTerm(ast, topsort_1.getName());
-			parser.setStartSymbol(start == null ? null : asJavaString(start.getSubterm(0)));
 		}
 		setupRegions = getSetupRegions(ast);
 	}
@@ -110,32 +103,24 @@ public class FragmentParser {
 		return parser != null;
 	}
 
-	private JSGLRI getParser(Descriptor descriptor, IPath path, ISourceProject project) {
-		try {
-			if (descriptor == null) return null;
-			
-			IParseController controller;
-			controller = descriptor.createParseController();
-			if (controller instanceof DynamicParseController)
-				controller = ((DynamicParseController) controller).getWrapped();
-			if (controller instanceof SGLRParseController) {
-				SGLRParseController sglrController = (SGLRParseController) controller;
-				controller.initialize(path, project, null);
-				JSGLRI result = sglrController.getParser(); 
-				//JSGLRI result = new JSGLRI(parser.getParseTable(), parser.getStartSymbol(), (SGLRParseController) controller);
-				result.setTimeout(FRAGMENT_PARSE_TIMEOUT, FRAGMENT_DISAMBIGUATE_TIMEOUT);
-				result.setUseRecovery(true);
-				return result;
-			} else {
-				throw new IllegalStateException(
-					new BadDescriptorException("SGLRParseController expected: " + controller.getClass().getName()));
-			}
-		} catch (BadDescriptorException e) {
-			Environment.logWarning("Could not load parser for testing language");
-		} catch (RuntimeException e) {
-			Environment.logWarning("Could not load parser for testing language");
-		}
-		return null;
+	/**
+	 * Creates a JSGLRI parser for the given language and file.
+	 * @param lang the language which we should parse.
+	 * @param file the file that this parser should parse.
+	 * @param ast TODO I don't know what it should represent, but it is used to determine the start symbol for the parser.
+	 * @return the parser, or null if lang was null.
+	 */
+	private JSGLRI getParser(ALanguage lang, File file, IStrategoTerm ast) {
+		if (lang == null)
+			return null;
+		IStrategoTerm start = StrategoImpUtil.findTerm(ast, topsort_1.getName());
+		// start symbol creation is copied from the previous configure method
+		// TODO: can't we just use lang.getStartSymbol?
+		String startSymbol = start == null ? null : asJavaString(start.getSubterm(0));
+		IParserConfig config = new ParserConfig(startSymbol, lang.getParseTableProvider(), FRAGMENT_PARSE_TIMEOUT);
+		JSGLRI result = new JSGLRI(config, file);
+		result.setUseRecovery(true);
+		return result;
 	}
 
 	public IStrategoTerm parse(ITokenizer oldTokenizer, IStrategoTerm fragment, boolean ignoreSetup)
@@ -152,15 +137,9 @@ public class FragmentParser {
 		}
 		if (parsed == null || !ALLOW_CACHING) {
 			//String fragmentInput = createTestFragmentString(oldTokenizer, fragment, false);
-			SGLRParseController controller = parser.getController();
-			controller.getParseLock().lock();
-			try {
-				parsed = parser.parse(fragmentInput, oldTokenizer.getFilename());
-			} finally {
-				controller.getParseLock().unlock();
-			}
+			parsed = parser.actuallyParse(fragmentInput, oldTokenizer.getFilename());
 			isLastSyntaxCorrect = getTokenizer(parsed).isSyntaxCorrect();
-			SourceAttachment.putSource(parsed, SourceAttachment.getResource(fragment), controller);
+			SourceAttachment.putSource(parsed, SourceAttachment.getResource(fragment), parser.getConfig());
 			if (!successExpected)
 				clearTokenErrors(getTokenizer(parsed));
 			if (isLastSyntaxCorrect == successExpected)

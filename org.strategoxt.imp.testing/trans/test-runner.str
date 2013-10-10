@@ -37,7 +37,8 @@ strategies
   test-runner-file:
     (selected, position, ast, path, project-path) -> None()
     with
-      testlistener-init 
+      <make-dynamic-rules> (ast, path, project-path)
+    ; testlistener-init 
     ; !$[[project-path]/[path]]
     ; testlistener-add-testsuite(|<get-testsuite-name-from-file>,<id>)
     ; try(run-testsuite)
@@ -50,7 +51,8 @@ strategies
     file -> (ast, [])
     where 
       ast  := <parse-spt-file> file
-    ; ast' := <topdown(repeat(spt-desugar)); alltd(spt-desugar-refactoring-conditions)> ast 
+    ; ast' := <topdown(repeat(spt-desugar)); alltd(spt-desugar-refactoring-conditions)> ast
+    // ; (ast', _, _, _) := <editor-analyze>(ast, path, project-path)
     ; testcases := <collect-all(testlistener-add-testcase(|file, <test-to-description>,<origin-offset;Fst>))>ast'
     ; <map(run-testcase(|file))>testcases
   

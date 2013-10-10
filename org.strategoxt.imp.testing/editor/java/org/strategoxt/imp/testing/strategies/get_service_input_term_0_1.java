@@ -5,9 +5,8 @@ import static org.spoofax.terms.Term.*;
 
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.sunshine.util.InputTermBuilder;
 import org.strategoxt.HybridInterpreter;
-import org.strategoxt.imp.runtime.services.InputTermBuilder;
-import org.strategoxt.imp.runtime.services.StrategoReferenceResolver;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
 
@@ -24,7 +23,10 @@ public class get_service_input_term_0_1 extends Strategy {
 		if (isTermAppl(analyzedAst) && ((IStrategoAppl) analyzedAst).getName().equals("None"))
 			analyzedAst = null;
 		if (!"COMPLETION".equals(tryGetName(current)) && !"NOCONTEXT".equals(tryGetName(current)))
-			current = InputTermBuilder.getMatchingAncestor(current, StrategoReferenceResolver.ALLOW_MULTI_CHILD_PARENT);
+			current = InputTermBuilder.getMatchingAncestor(current,
+//					StrategoReferenceResolver.ALLOW_MULTI_CHILD_PARENT);
+					// FIXME hardcoded constant due to dirty porting to Sunshine 
+					false);
 		HybridInterpreter runtime = HybridInterpreter.getInterpreter(context);
 		InputTermBuilder inputBuilder = new InputTermBuilder(runtime, analyzedAst);
 		return inputBuilder.makeInputTerm(current, true, false);

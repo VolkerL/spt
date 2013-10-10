@@ -1,14 +1,8 @@
 package org.strategoxt.imp.testing.strategies;
 
-import static org.spoofax.interpreter.core.Tools.asJavaString;
-
-import java.util.List;
-
-import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.strategoxt.imp.runtime.dynamicloading.BadDescriptorException;
-import org.strategoxt.imp.runtime.dynamicloading.Descriptor;
-import org.strategoxt.imp.runtime.dynamicloading.TermReader;
+//import org.spoofax.interpreter.terms.IStrategoAppl;
+//import org.spoofax.interpreter.terms.ITermFactory;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
 
@@ -21,12 +15,13 @@ public class plugin_get_property_values_0_1 extends Strategy {
 
 	@Override
 	public IStrategoTerm invoke(Context context, IStrategoTerm property, IStrategoTerm language) {
-		try {
-			Descriptor descriptor = ObserverCache.getInstance().getDescriptor(asJavaString(language));
-			List<IStrategoAppl> results = TermReader.collectTerms(descriptor.getDocument(), asJavaString(property));
-			return context.getFactory().makeList(results.toArray(new IStrategoTerm[results.size()]));
-		} catch (BadDescriptorException e) {
-			return null;
-		}
+		throw new UnsupportedOperationException("Not supported due to porting to Sunshine");
+//		try {
+//			Descriptor descriptor = ObserverCache.getInstance().getDescriptor(asJavaString(language));
+//			List<IStrategoAppl> results = TermReader.collectTerms(descriptor.getDocument(), asJavaString(property));
+//			return context.getFactory().makeList(results.toArray(new IStrategoTerm[results.size()]));
+//		} catch (BadDescriptorException e) {
+//			return null;
+//		}
 	}
 }

@@ -110,20 +110,23 @@ rules
     where
       (input, selections) := <Test-get-input <+ !(FailsParsing(), [])> i
     ; if not(<?[_ | _]; all(is-parse-only-test)> expectations) then
+      	debug(!"Start Initing the editor for a test: ");
         // TODO: set starting directory to project path using invoke-plugin-strategy
         plugin-strategy-invoke(|<Language>, "editor-init")
+        ; debug(!"Invoked editor-init: ")
       ; where(spt-setup-isolate)
       ; input'     := (input, <InputFile>, <project-path>)
       ; messages   := <plugin-strategy-invoke(|<Language>, <spt-get-observer>) <+ !([], [], [])> input'
+      ; debug(!"got messages (empty might indicate failed observer call!): ")
       ; messages'  := <strip-and-record-analyzed-ast <+ reset-analyzed-ast(|input)> <try(?Some(<id>))> messages
       ; messages'' := <try((flatten-list, flatten-list, flatten-list))> messages'
       else
         messages'' := ([], [], [])
       end
     ; if !expectations => [] then
-        warnings := <filter(check-expectation(|input, selections, messages''))> [Success()]
+        warnings := <filter(check-expectation(|input, selections, ([],[],[])/*messages''*/))> [Success()]
       else
-        warnings := <filter(check-expectation(|input, selections, messages''))> expectations
+        warnings := <filter(check-expectation(|input, selections, ([],[],[])/*messages''*/))> expectations
       end
     ; where(spt-isolate)
     ; not([]) 

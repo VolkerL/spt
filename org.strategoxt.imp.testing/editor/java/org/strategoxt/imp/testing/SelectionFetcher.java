@@ -14,9 +14,9 @@ import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.imploder.IToken;
 import org.spoofax.jsglr.client.imploder.ITokenizer;
+import org.spoofax.sunshine.Environment;
+import org.spoofax.sunshine.util.StrategoImpUtil;
 import org.spoofax.terms.TermVisitor;
-import org.strategoxt.imp.runtime.Environment;
-import org.strategoxt.imp.runtime.stratego.StrategoTermPath;
 
 /**
  * Lamely-named class for fetching selections in test
@@ -75,12 +75,12 @@ public class SelectionFetcher {
 				IToken right = getTokenAfter(getRightToken(term));
 				if (unclosedChild != null && isCloseQuote(right)
 						&& isNoQuoteBetween(unclosedLeft, right)) {
-					results.add(StrategoTermPath.findCommonAncestor(unclosedChild, term));
+					results.add(StrategoImpUtil.findCommonAncestor(unclosedChild, term));
 					unclosedChild = null;
 				}
 			}
 		}.visit(parsedFragment);
-		return Environment.getTermFactory().makeList(results);
+		return Environment.INSTANCE().termFactory.makeList(results);
 	}
 	
 	private static IStrategoTerm getMatchingDescendant(IStrategoTerm term) {

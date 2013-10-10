@@ -15,10 +15,22 @@ imports
   index-taskengine-isolation
   
 rules
-    
+
+  // ast' should already be processed (e.g. desugared)
+  make-dynamic-rules:
+  	(ast', path, project-path) -> None()
+  	with
+  	scope-paths(
+  	rules(
+          InputFile := path
+          Language  := <get-language> ast'
+          TargetLanguage := <get-target-language <+ get-language> ast'
+        )
+    |path, project-path)
+
   editor-analyze:
     (ast, path, project-path) ->
-    (ast', errors', warnings', notes')
+    (ast, errors', warnings', notes')
     with
       editor-init;
       ast' := <topdown(repeat(spt-desugar)); alltd(spt-desugar-refactoring-conditions)> ast
@@ -83,7 +95,7 @@ rules
       scope-paths( result := <to-java(|<base-filename> path)> selected | path, project-path)
   
   generate-aterm:
-    (selected, position, ast, path, project-path) -> (filename, selected)
+    (selected, position, ast, path, project-path) -> (filename, project-path)
     with
       filename := <guarantee-extension(|"aterm")> path
 
@@ -185,12 +197,15 @@ strategies
     where
       plugin-get-property-values(|<Language>) => [property#([value|_]) | _]
 	
+  external get-observer(|language)
+  
   spt-get-observer =
-    <plugin-get-string-property> "SemanticObserver"
+    get-observer(|<Language>)
 
+  external get-reference-resolvers(|language)
+  
   spt-get-reference-resolvers =
-    <plugin-get-property-values(|<Language>)> "ReferenceRule";
-    map(?"ReferenceRule"#([_, <id>]))
+    get-reference-resolvers(|<Language>)
 
   spt-get-content-proposers =
     <plugin-get-property-values(|<Language>)> "CompletionProposer";
