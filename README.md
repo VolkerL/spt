@@ -34,7 +34,7 @@ What that basically boils down to is cloning [the stratego repo](https://github.
 and [the mb-rep repository](https://github.com/metaborg/mb-rep).
 Also, you might have to build the [latter project](mb-rep/org.strategoxt.imp.editors.aterm)
 to have that `Aterm.def` file in the `include` folder.
-Alternatively, you can just use `find` to locate that file
+Alternatively, you can just use `find` to locate that file (turns out it is in the `syntax` folder)
 (it should be somewhere outside the include file without having to build it)
 and change the reference in the build file.
 
