@@ -25,7 +25,7 @@ rules
   check-error:
     Test(_, _, input{a*}, expectations) -> error*
     where
-      debug(!"RESOLVING : ");
+      debug(!"Resolving check-error called : ");
       !a* => [ast | selections];
       debug(!"Annotations : ");
       reference* := <collect-all(?Numbered(_) + ?Unnumbered(), conc)> expectations;

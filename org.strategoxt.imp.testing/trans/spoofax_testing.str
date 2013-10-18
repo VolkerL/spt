@@ -30,7 +30,7 @@ rules
 
   editor-analyze:
     (ast, path, project-path) ->
-    (ast, errors', warnings', notes')
+    (ast', errors', warnings', notes')
     with
       editor-init;
       ast' := <topdown(repeat(spt-desugar)); alltd(spt-desugar-refactoring-conditions)> ast
@@ -95,7 +95,7 @@ rules
       scope-paths( result := <to-java(|<base-filename> path)> selected | path, project-path)
   
   generate-aterm:
-    (selected, position, ast, path, project-path) -> (filename, project-path)
+    (selected, position, ast, path, project-path) -> (filename, selected)
     with
       filename := <guarantee-extension(|"aterm")> path
 

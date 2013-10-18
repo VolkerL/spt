@@ -108,6 +108,7 @@ rules
   check-error:
     Test(_,description(d), i, expectations) -> (d, warnings)
     where
+      debug(!"General check-error called") ;
       (input, selections) := <Test-get-input <+ !(FailsParsing(), [])> i
     ; if not(<?[_ | _]; all(is-parse-only-test)> expectations) then
       	debug(!"Start Initing the editor for a test: ");
@@ -124,9 +125,9 @@ rules
         messages'' := ([], [], [])
       end
     ; if !expectations => [] then
-        warnings := <filter(check-expectation(|input, selections, ([],[],[])/*messages''*/))> [Success()]
+        warnings := <filter(check-expectation(|input, selections, messages''))> [Success()]
       else
-        warnings := <filter(check-expectation(|input, selections, ([],[],[])/*messages''*/))> expectations
+        warnings := <filter(check-expectation(|input, selections, messages''))> expectations
       end
     ; where(spt-isolate)
     ; not([]) 
