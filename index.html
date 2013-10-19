@@ -66,22 +66,13 @@
 
 					<section>
 						<h2>Spoofax</h2>
-						<img class="fragment" src="images/language.gif" style="max-height:50%;">
-						<p><small><a href="https://strategoxt.org/Spoofax/">strategoxt.org/Spoofax/</a></small></p>
-					</section>
-					<section>
-						<h2>Spoofax</h2>
-						<img src="images/workbench.jpg" style="max-height:70%;">
-						<p><small><a href="https://strategoxt.org/Spoofax/">strategoxt.org/Spoofax/</a></small></p>
-					</section>
-					<section>
-						<h2>Spoofax</h2>
 						<ul>
 							<li class="fragment">Grammar - (SDF)</li>
 							<li class="fragment">Name resolution - (NaBL)</li>
 							<li class="fragment">Program transformations (optimizations) - (Stratego)</li>
 							<li class="fragment">Testing - (SPT)</li>
 						</ul>
+						<p><small><a href="https://strategoxt.org/Spoofax/">strategoxt.org/Spoofax/</a></small></p>
 					</section>
 
 					<section>
@@ -164,7 +155,6 @@
 				</section>
 
 				<section>
-				<section>
 					<h2>How does it work?</h2>
 					<ul>
 						<li class="fragment">Parse the SPT syntax</li>
@@ -173,6 +163,7 @@
 						<li class="fragment">Check for errors and expectations</li>
 					</ul>
 				</section>
+				<section>
 					<section>
 						<h3>Parsing the SPT file</h3>
 						<img src="images/pluginxml.png" class="fragment">
@@ -180,14 +171,207 @@
 						<img src="images/parsefile.png" class="fragment">
 					</section>
 					<section>
+						<h3>Using Sunshine</h3>
+						<img src="images/parsefilesunshine.png">
+					</section>
+				</section>
+				<section>
+					<section>
 						<h3>Obtaining the Language</h3>
 						<img src="images/testheader.png" class="fragment">
 						<br />
 						<img src="images/testheaderaterm.png" class="fragment">
 					</section>
 					<section>
-						
+						<h3>Eclipse vs Sunshine</h3>
+						<img src="images/getlang.png">	
 					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Parsing the fragments</h3>
+						<ul>
+							<li class="fragment">Replace everything else with whitespace</li>
+							<li class="fragment">Obtain parser for Language</li>
+							<li class="fragment">Add the result as annotation</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Obtaining the parser</h3>
+						<img src="images/getparser.png">
+					</section>
+					<section>
+						<h3>Using Sunshine</h3>
+						<img src="images/getparsersunshine.png">
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Checking for errors and expectations</h3>
+						<ul>
+							<li>check-error</li>
+							<li>check-expectation</li>
+						</ul>
+					</section>
+					<section>
+						<h3>check-error</h3>
+						<img src="images/checkerror1.png">
+						<br />
+						<img class="fragment" src="images/observer.png">
+					</section>
+					<section>
+						<h3>check-error</h3>
+						<img src="images/checkerror2.png">
+					</section>
+					<section>
+						<img src="images/striprec.png">
+					</section>
+					<section>
+						<h3>check-error</h3>
+						<img src="images/checkerror2.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Parsing</h4>
+						<img src="images/checkexpparsefail.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Expecting errors</h4>
+						<img src="images/checkexperrors.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve0.png">
+					</section>
+					<section>
+						<img src="images/nameres2.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve0.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve1.png">
+					</section>
+					<section>selected-&gt;(selected, position, ast, path, project-path)</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve1.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve2.png">
+					</section>
+					<section>
+						<img src="images/refrule.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve2.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve3.png">
+					</section>
+					<section>
+						<h3>check-expectation</h3>
+						<h4>Name resolution</h4>
+						<img src="images/checkexpresolve4.png">
+					</section>
+					<section>
+						<img src="images/resolvecheck.png">
+					</section>
+					<section>
+						<img src="images/wtf.png">
+					</section>
+					<section>
+						<img src="images/resolvecheck.png">
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runspt.png">
+					</section>
+
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runsptdynrules.png">
+					</section>
+
+					<section>
+						<img src="images/makedynrules.png">
+					</section>
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runsptdynrules.png">
+					</section>
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runsuite.png">
+					</section>
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runsuiteparse.png">
+					</section>
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runtestcase.png">
+					</section>
+					<section>
+						<h2>Running SPT</h2>
+						<img src="images/runtestcasecheck.png">
+					</section>
+				</section>
+
+				<section>
+					<h2>Running SPT with sunshine</h2>
+					<img src="images/runsunshine.png">
+				</section>
+
+				<section>
+					<h2>General problems</h2>
+					<ul>
+						<li class="fragment">Hardcoded dependency on framework</li>
+						<li class="fragment">Lack of documentation/comments</li>
+						<li class="fragment">Hardcoded coupling between the test-runner UI and SPT</li>
+						<li class="fragment">Eclipse dependencies in used libraries</li>
+					</ul>
+				</section>
+				<section><img src="images/checkexpresolve1.png"></section>
+				<section><img src="images/ipath.png"></section>
+				<section>
+					<h2>Sunshine's problems</h2>
+					<ul>
+						<li class="fragment">No custom parser registration</li>
+						<li class="fragment">Single threaded
+							<span class="fragment" style="color:rgb(0,250,0);">
+								(no parse locks required though)
+							</span>
+						</li>
+						<li class="fragment">No way to obtain resolvers
+							<span class="fragment" style="color:rgb(0,250,0);">(it does now)</span></li>
+							<li class="fragment">
+							No analysis of a single file <br/>
+							(I'm afraid multi-file analysis would break the dynamic rules)
+							</li>
+					</ul>
 				</section>
 
 			</div>
@@ -208,7 +392,7 @@
 				center: true,
 				loop: true,
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+				transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
 				backgroundTransition: 'none', // default/linear/none
 
 				// Optional libraries used to extend on reveal.js
