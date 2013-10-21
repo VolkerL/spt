@@ -26,17 +26,27 @@ To save you that effort, and as the jar files should be platform independent,
 I see no harm in having them online (maybe the issue is License related???).
 
 To 'build' Sunshine, you can right-click the project and export is as a runnable jar file.
+
 Now open this repository's `org.strategoxt.imp.testing` project in Eclipse.
 
 To build this version of SPT you will need to alter [the build file's](org.stratego.imp.testing/build.main.xml)
 line 22 and 23 to point to where these files can be found.
-What that basically boils down to is cloning [the stratego repo](https://github.com/metaborg/stratego)
+
+The lazy way to get those files:
+
+```
+curl -O https://raw.github.com/metaborg/stratego/master/org.strategoxt.imp.editors.stratego/syntax/Stratego-Sugar.def
+curl -O https://raw.github.com/metaborg/mb-rep/master/org.strategoxt.imp.editors.aterm/syntax/ATerm.def
+```
+
+Or you could clone [the stratego repo](https://github.com/metaborg/stratego)
 and [the mb-rep repository](https://github.com/metaborg/mb-rep).
-Also, you might have to build the [latter project](mb-rep/org.strategoxt.imp.editors.aterm)
-to have that `Aterm.def` file in the `include` folder.
-Alternatively, you can just use `find` to locate that file (turns out it is in the `syntax` folder)
-(it should be somewhere outside the include file without having to build it)
-and change the reference in the build file.
+You can find both files in their respective `syntax` folders.
+
+Now the final step to make it build is to set up the classpath for SPT's `build.main.xml` file.
+Right click that file in Eclipse and go to `Properties`.
+Edit the `Spoofax-Testing build.main.xml` run configuration and navigate to the `classpath` tab.
+Here add the `sunshine.jar` file you created by building Sunshine.
 
 Now `Ctrl+Alt+b` should start building the project.
 
