@@ -44,7 +44,7 @@
         </condition>
         <property name="build.strategoxt.stratego" location="${user.home}/.nix-profile/bin"/>
     
-        <import file="build.generated.xml"/>
+        <import file="build.generated.bak.xml"/>
     
         <!-- Main target -->
         <target name="all" depends="spoofaximp.default.jar"/>
