@@ -7,14 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.spi.RegistryContributor;
-import org.eclipse.ui.PlatformUI;
+import org.strategoxt.imp.testing.listener.CommandLineTestListener;
 import org.strategoxt.imp.testing.listener.ITestListener;
-import org.strategoxt.imp.testing.preferences.PreferenceConstants;
-import org.strategoxt.imp.testing.preferences.PreferenceInitializer;
 
 /**
  * 
@@ -29,34 +23,39 @@ import org.strategoxt.imp.testing.preferences.PreferenceInitializer;
 public final class ListenerWrapper implements ITestListener {
 
 	private static ITestListener instance;
-
-	public static ITestListener instance() throws CoreException {
+	
+	public static ITestListener instance() {
 		if (instance == null)
 			instance = new ListenerWrapper();
 
 		return instance;
 	}
 
+	private Object wrapped = null; 
+	
 	private ListenerWrapper() {
 	}
 
-	private Object getWrapped() throws CoreException {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ITestListener.EXTENSION_ID);
+	private Object getWrapped() {
+//		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+//				ITestListener.EXTENSION_ID);
 
-		Object candidateListener = null;
-		String preferredView = PlatformUI.getPreferenceStore().getString(PreferenceConstants.P_LISTENER_ID);
-		if (preferredView.equals(""))
-			preferredView = PreferenceInitializer.DEFAULT_LISTENER_ID;
+//		Object candidateListener = null;
+//		String preferredView = PlatformUI.getPreferenceStore().getString(PreferenceConstants.P_LISTENER_ID);
+//		if (preferredView.equals(""))
+//			preferredView = PreferenceInitializer.DEFAULT_LISTENER_ID;
 
-		for (IConfigurationElement e : config) {
-			if (((RegistryContributor) e.getContributor()).getActualName().equals(preferredView)) {
-				candidateListener = e.createExecutableExtension("class");
-				break;
-			}
-		}
+//		for (IConfigurationElement e : config) {
+//			if (((RegistryContributor) e.getContributor()).getActualName().equals(preferredView)) {
+//				candidateListener = e.createExecutableExtension("class");
+//				break;
+//			}
+//		}
 
-		return candidateListener;
+//		return candidateListener;
+		
+		if(wrapped == null) wrapped = new CommandLineTestListener();
+		return wrapped;
 	}
 
 	/*
@@ -65,7 +64,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#reset()
 	 */
 	public void reset() throws SecurityException, NoSuchMethodException, IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException, CoreException {
+			IllegalAccessException, InvocationTargetException {
 
 		Object wrapped = getWrapped();
 		// Using reflection, because if I use a cast, I get a ClassCastException
@@ -82,7 +81,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#addTestcase(java.lang.String, java.lang.String, int)
 	 */
 	public void addTestcase(String testsuite, String description, int offset) throws IllegalArgumentException,
-			IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, CoreException {
+			IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
 
 		Object wrapped = getWrapped();
 		Method m = wrapped.getClass().getMethod("addTestcase", new Class[] { String.class, String.class, int.class });
@@ -98,7 +97,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#addTestsuite(java.lang.String, java.lang.String)
 	 */
 	public void addTestsuite(String name, String filename) throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException, SecurityException, NoSuchMethodException, CoreException {
+			InvocationTargetException, SecurityException, NoSuchMethodException {
 
 		Object wrapped = getWrapped();
 		Method m = wrapped.getClass().getMethod("addTestsuite", new Class[] { String.class, String.class });
@@ -113,7 +112,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#startTestcase(java.lang.String, java.lang.String)
 	 */
 	public void startTestcase(String testsuite, String description) throws SecurityException, NoSuchMethodException,
-			IllegalArgumentException, IllegalAccessException, InvocationTargetException, CoreException {
+			IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
 		Object wrapped = getWrapped();
 		Method m = wrapped.getClass().getMethod("startTestcase", new Class[] { String.class, String.class });
@@ -131,7 +130,7 @@ public final class ListenerWrapper implements ITestListener {
 	 */
 	public void finishTestcase(String testsuite, String description, boolean succeeded)
 			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException,
-			NoSuchMethodException, CoreException {
+			NoSuchMethodException {
 
 		Object wrapped = getWrapped();
 		Method m = wrapped.getClass().getMethod("finishTestcase",

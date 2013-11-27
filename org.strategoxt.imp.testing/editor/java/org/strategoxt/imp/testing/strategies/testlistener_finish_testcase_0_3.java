@@ -7,9 +7,10 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.strategoxt.imp.testing.listener.ITestListener;
-//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
+import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
+//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 
 public class testlistener_finish_testcase_0_3 extends Strategy {
 
@@ -24,22 +25,22 @@ public class testlistener_finish_testcase_0_3 extends Strategy {
 		String ts = ((IStrategoString) arg0).stringValue();
 		String desc = ((IStrategoString) arg1).stringValue();
 		String appl = ((IStrategoAppl) arg2).getConstructor().getName();
-		System.out.println("FINISHED: "+ts+", "+desc+", RESULT: "+appl);
+//		System.out.println("FINISHED: "+ts+", "+desc+", RESULT: "+appl);
 
-//		try {
-//			ITestListener listener = ListenerWrapper.instance();
-//			if (appl.equals("True"))
-//				listener.finishTestcase(ts, desc, true);
-//			else
-//				listener.finishTestcase(ts, desc, false);
-//		} catch (Exception e) {
-//			ITermFactory factory = context.getFactory();
-////			Environment.logException("Failed to finish test case to listener. Maybe no listeners?", e);
-//			return factory.makeAppl(
-//					factory.makeConstructor("Error", 1),
-//					factory.makeString("Failed to finish test case to listener. Maybe no listeners?: "
-//							+ e.getLocalizedMessage()));
-//		}
+		try {
+			ITestListener listener = ListenerWrapper.instance();
+			if (appl.equals("True"))
+				listener.finishTestcase(ts, desc, true);
+			else
+				listener.finishTestcase(ts, desc, false);
+		} catch (Exception e) {
+			ITermFactory factory = context.getFactory();
+//			Environment.logException("Failed to finish test case to listener. Maybe no listeners?", e);
+			return factory.makeAppl(
+					factory.makeConstructor("Error", 1),
+					factory.makeString("Failed to finish test case to listener. Maybe no listeners?: "
+							+ e.getLocalizedMessage()));
+		}
 
 		return current;
 	}

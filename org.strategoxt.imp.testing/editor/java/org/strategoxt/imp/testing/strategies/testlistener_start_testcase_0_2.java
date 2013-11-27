@@ -6,9 +6,10 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.strategoxt.imp.testing.listener.ITestListener;
-//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
+import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
+//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 
 public class testlistener_start_testcase_0_2 extends Strategy {
 
@@ -22,17 +23,17 @@ public class testlistener_start_testcase_0_2 extends Strategy {
 		String ts = ((IStrategoString) arg0).stringValue();
 		String desc = ((IStrategoString) arg1).stringValue();
 
-//		try {
-//			ITestListener listener = ListenerWrapper.instance();
-//			listener.startTestcase(ts, desc);
-//		} catch (Exception e) {
-//			ITermFactory factory = context.getFactory();
-////			Environment.logException("Failed to start test case to listener. Maybe no listeners?", e);
-//			return factory.makeAppl(
-//					factory.makeConstructor("Error", 1),
-//					factory.makeString("Failed to start test case to listener. Maybe no listeners?: "
-//							+ e.getLocalizedMessage()));
-//		}
+		try {
+			ITestListener listener = ListenerWrapper.instance();
+			listener.startTestcase(ts, desc);
+		} catch (Exception e) {
+			ITermFactory factory = context.getFactory();
+//			Environment.logException("Failed to start test case to listener. Maybe no listeners?", e);
+			return factory.makeAppl(
+					factory.makeConstructor("Error", 1),
+					factory.makeString("Failed to start test case to listener. Maybe no listeners?: "
+							+ e.getLocalizedMessage()));
+		}
 
 		return current;
 	}

@@ -6,9 +6,10 @@ import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
 import org.strategoxt.imp.testing.listener.ITestListener;
-//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
+import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
+//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 
 public class testlistener_add_testsuite_0_2 extends Strategy {
 
@@ -22,15 +23,15 @@ public class testlistener_add_testsuite_0_2 extends Strategy {
 		String name = ((IStrategoString) arg0).stringValue();
 		String filename = ((IStrategoString) arg1).stringValue();
 
-//		try {
-//			ITestListener listener = ListenerWrapper.instance();
-//			listener.addTestsuite(name, filename);
-//		} catch (Exception e) {
-//			ITermFactory factory = context.getFactory();
-////			Environment.logException("Failed to add test suite to listener. Maybe no listeners?", e);
-//			return factory.makeAppl(factory.makeConstructor("Error", 1), factory
-//					.makeString("Failed to add test suite to listener. Maybe no listeners?: " + e.getLocalizedMessage()));
-//		}
+		try {
+			ITestListener listener = ListenerWrapper.instance();
+			listener.addTestsuite(name, filename);
+		} catch (Exception e) {
+			ITermFactory factory = context.getFactory();
+//			Environment.logException("Failed to add test suite to listener. Maybe no listeners?", e);
+			return factory.makeAppl(factory.makeConstructor("Error", 1), factory
+					.makeString("Failed to add test suite to listener. Maybe no listeners?: " + e.getLocalizedMessage()));
+		}
 
 		return current;
 	}
