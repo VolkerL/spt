@@ -62,13 +62,17 @@ Assuming you have the Sunshine jar, an spt testcase you want to run and a gramma
 here is how to do so:
 
 ```Shell
-java -cp sunshine.jar org.spoofax.sunshine.drivers.Main
+java
+  -cp "sunshine.jar:<path to jackson libraries>"
+  org.spoofax.sunshine.drivers.Main
   --auto-lang path-to-repo/org.strategoxt.imp.testing
   --project path-to-directory-with-test-cases/
   --builder test-runner-file
   --build-on testcase.spt
   --no-analysis
 ```
+The Jackson libraries included in (the lib folder)[org.stratego.imp.testing/lib] need to be on the classpath
+to allow the JSON test reports to be written.
 
 Sunshine options explained:
 
