@@ -71,7 +71,7 @@ java
   --build-on testcase.spt
   --no-analysis
 ```
-The Jackson libraries included in (the lib folder)[org.stratego.imp.testing/lib] need to be on the classpath
+The Jackson libraries included in [the lib folder](org.strategoxt.imp.testing/lib) need to be on the classpath
 to allow the JSON test reports to be written.
 
 Sunshine options explained:
