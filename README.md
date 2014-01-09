@@ -1,6 +1,6 @@
 # Sunshine-port of SPT
 
-This repository contains a verions of the Spoofax Testing Language (SPT)
+This repository contains a version of the Spoofax Testing Language (SPT)
 that is in the process of being ported to use Sunshine (Spoofax without Eclipse)
 instead of the Eclipse Plugin related libraries.
 
@@ -10,26 +10,29 @@ This branch may also introduce errors and does not yet support all kinds of test
 
 > What kind of testcases *are* supported?  
 > I have no idea.
-The `parse succeeds`, `parse fails`, `resolve #x` and `resolve #x to #y` should be supported.
+The `parse succeeds`, `parse fails`, `resolve #x`, `resolve #x to #y` and `x errors` should be supported.
 
 Note that this README is branch specific.
 
 ## Setup
 
+#### Setting up Sunshine
 To start using SPT in combination with Sunshine
 you will need the [appropriate Sunshine version](https://github.com/VolkerL/spoofax-sunshine).
 Open the `org.spoofax.sunshine` project in Eclipse.
 If the libraries are not on the Github repo, please make a Github issue there to remind me.
-As some dependencies would otherwise have to be obtained from an Eclipse instance's plugin folder
-if it has the appropriate Spoofax Plugin.
+Some dependencies would otherwise have to be obtained from an Eclipse instance's plugin folder,
+so having them in the repo itself should be easier for now.
 To save you that effort, and as the jar files should be platform independent,
 I see no harm in having them online (maybe the issue is License related???).
 
-To 'build' Sunshine, you can right-click the project and export is as a runnable jar file.
+To build the Sunshine jar, execute the `build.xml` file with ant.
 
+#### Setting up SPT
 Now open this repository's `org.strategoxt.imp.testing` project in Eclipse.
 
-To build this version of SPT you will need to alter [the build file's](org.stratego.imp.testing/build.main.xml)
+SPT depends on some files that do not come with SPT itself.
+Therefore you will need to alter [the build file's](org.stratego.imp.testing/build.main.xml)
 line 22 and 23 to point to where these files can be found.
 
 The lazy way to get those files:
@@ -46,7 +49,11 @@ You can find both files in their respective `syntax` folders.
 Now the final step to make it build is to set up the classpath for SPT's `build.main.xml` file.
 Right click that file in Eclipse and go to `Properties`.
 Edit the `Spoofax-Testing build.main.xml` run configuration and navigate to the `classpath` tab.
-Here add the `sunshine.jar` file you created by building Sunshine.
+Here add the `spoofax-sunshine.jar` file you created by building Sunshine.
+
+Finally the SPT repo comes with a project which is an entry point for external TestReporter service providers.
+This project is called `org.metaborg.spt.lisener` and can be found [here](org.metaborg.spt.listener).
+Build this project using its ant `build.xml` file and make sure SPT has access to this jar or project during compilation.
 
 Now `Ctrl+Alt+b` should start building the project.
 
@@ -63,7 +70,7 @@ here is how to do so:
 
 ```Shell
 java
-  -cp "sunshine.jar:<path to jackson libraries>"
+  -cp "<path to sunshine jar>:<path to org.metaborg.listener jar>"
   org.spoofax.sunshine.drivers.Main
   --auto-lang path-to-repo/org.strategoxt.imp.testing
   --project path-to-directory-with-test-cases/
@@ -71,8 +78,6 @@ java
   --build-on testcase.spt
   --no-analysis
 ```
-The Jackson libraries included in [the lib folder](org.strategoxt.imp.testing/lib) need to be on the classpath
-to allow the JSON test reports to be written.
 
 Sunshine options explained:
 
@@ -104,9 +109,22 @@ The output should start appearing on your screen.
 At the moment it should just be a bunch of logging from Sunshine,
 mixed with a lot of debug stuff from `debug` and `println` statements in SPT.
 
-We are still looking to add proper test report generation.
-Either by making a separate builder for it, or by leveraging the testlistener structure
-that is currently broken due to this port.
+#### Getting proper output
+
+To get proper test results you can do two things:
+- use the provided jUnit xml TestReporter
+- or write your own TestReporter.
+
+To create output, SPT allows TestReporters to register themselves.
+All registered TestReporters will be notified when tests are executed.
+
+To use the provided jUnit xml reporter, build the `org.metaborg.spt.listener.junitxml` project
+located [here in the SPT repo](org.metaborg.spt.listener.junitxml)
+and add it to the classpath (add the path to the generated jar to the `-cp ""` part of your sunshine call).
+
+To use your own reporter, implement the `org.metaborg.spt.listener.ITestReporter` interface and register it 
+[as a standard Java Service](http://docs.oracle.com/javase/tutorial/sound/SPI-intro.html).
+You can use the provided jUnit xml reporter project as example.
 
 ## Disclaimer
 
