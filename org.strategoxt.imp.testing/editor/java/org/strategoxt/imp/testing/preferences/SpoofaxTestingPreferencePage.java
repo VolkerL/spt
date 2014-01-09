@@ -8,7 +8,6 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import org.strategoxt.imp.testing.listener.ITestListener;
 
 /**
  * This class represents a preference page that is contributed to the Preferences dialog. By subclassing
@@ -35,7 +34,9 @@ public class SpoofaxTestingPreferencePage extends FieldEditorPreferencePage impl
 	public void createFieldEditors() {
 
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ITestListener.EXTENSION_ID);
+				// FIXME deal with this properly
+				"some.supercool.extension.id.for.testlisteners");
+				//ITestListener.EXTENSION_ID);
 		String[][] providers = new String[config.length][2];
 
 		int i = 0;

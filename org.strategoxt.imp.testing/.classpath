@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="/org.spoofax.sunshine/lib/log4j-api-2.0-beta8.jar"/>
 	<classpathentry kind="lib" path="/org.spoofax.sunshine/lib/log4j-core-2.0-beta8-javadoc.jar"/>
 	<classpathentry kind="lib" path="/org.spoofax.sunshine/lib/log4j-core-2.0-beta8.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.metaborg.spt.listener"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

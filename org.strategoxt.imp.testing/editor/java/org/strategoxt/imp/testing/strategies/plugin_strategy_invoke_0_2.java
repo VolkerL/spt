@@ -38,7 +38,7 @@ public class plugin_strategy_invoke_0_2 extends Strategy {
 				asJavaString(languageName));
 		HybridInterpreter runtime = RuntimeService.INSTANCE().getRuntime(lang);
 
-		System.out.println("Doing stuff with " + strategy);
+//		System.out.println("Doing stuff with " + strategy);
 		// strategy should be a String
 		if (isTermAppl(strategy) && ((IStrategoAppl) strategy).getName().equals("Strategy"))
 			strategy = termAt(strategy, 0);
@@ -50,10 +50,10 @@ public class plugin_strategy_invoke_0_2 extends Strategy {
 		// how should we log the exception?
 		try {
 			if (runtime.invoke(asJavaString(strategy))) {
-				System.out.println("\n\nWOOPWOOP I invoked "+asJavaString(strategy)+"\n\n");
+//				System.out.println("\n\nWOOPWOOP I invoked "+asJavaString(strategy)+"\n\n");
 				current = runtime.current();
 				current = factory.makeAppl(factory.makeConstructor("Some", 1), current);
-				System.out.println("Returning " + current);
+//				System.out.println("Returning " + current);
 				return current;
 			} else {
 				Context foreignContext = runtime.getCompiledContext();

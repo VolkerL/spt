@@ -2,11 +2,13 @@ package org.strategoxt.imp.testing.strategies;
 
 import static org.spoofax.interpreter.core.Tools.isTermString;
 
+import java.util.Iterator;
+
+import org.metaborg.spt.listener.ITestReporter;
+import org.metaborg.spt.listener.TestReporterProvider;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.strategoxt.imp.testing.listener.ITestListener;
-import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
 //import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
@@ -24,8 +26,14 @@ public class testlistener_start_testcase_0_2 extends Strategy {
 		String desc = ((IStrategoString) arg1).stringValue();
 
 		try {
-			ITestListener listener = ListenerWrapper.instance();
-			listener.startTestcase(ts, desc);
+//			ITestListener listener = ListenerWrapper.instance();
+//			listener.startTestcase(ts, desc);
+			Iterator<ITestReporter> it = TestReporterProvider.getInstance().getReporters();
+			System.out.println("\n--------------------------\nWOOOO\n"+it+"\nOOOOW\n-------------------");
+			while (it != null && it.hasNext()) {
+				System.out.println("\n--------------------------\nWOOOO\nnext\nOOOOW\n-------------------");
+				it.next().startTestcase(ts, desc);
+			}
 		} catch (Exception e) {
 			ITermFactory factory = context.getFactory();
 //			Environment.logException("Failed to start test case to listener. Maybe no listeners?", e);

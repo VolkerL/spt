@@ -3,19 +3,19 @@ package org.strategoxt.imp.testing.strategies;
 import static org.spoofax.interpreter.core.Tools.isTermString;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.metaborg.spt.listener.ITestReporter;
+import org.metaborg.spt.listener.TestReporterProvider;
 import org.spoofax.interpreter.terms.IStrategoAppl;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoString;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.interpreter.terms.IStrategoTuple;
 import org.spoofax.interpreter.terms.ITermFactory;
-import org.strategoxt.imp.testing.listener.ITestListener;
-import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
-//import org.strategoxt.imp.testing.listener.helper.ListenerWrapper;
 
 public class testlistener_finish_testcase_0_4 extends Strategy {
 
@@ -43,11 +43,20 @@ public class testlistener_finish_testcase_0_4 extends Strategy {
 //		System.out.println("FINISHED: "+ts+", "+desc+", RESULT: "+appl);
 
 		try {
-			ITestListener listener = ListenerWrapper.instance();
-			if (appl.equals("True"))
-				listener.finishTestcase(ts, desc, true, messages);
-			else
-				listener.finishTestcase(ts, desc, false, messages);
+//			ITestListener listener = ListenerWrapper.instance();
+//			if (appl.equals("True"))
+//				listener.finishTestcase(ts, desc, true, messages);
+//			else
+//				listener.finishTestcase(ts, desc, false, messages);
+			Iterator<ITestReporter> it = TestReporterProvider.getInstance().getReporters();
+			while (it != null && it.hasNext()) {
+				if (appl.equals("True")) {
+					it.next().finishTestcase(ts, desc, true, messages);
+				} else {
+					it.next().finishTestcase(ts, desc, false, messages);
+				}
+			}
+			
 		} catch (Exception e) {
 			ITermFactory factory = context.getFactory();
 //			Environment.logException("Failed to finish test case to listener. Maybe no listeners?", e);

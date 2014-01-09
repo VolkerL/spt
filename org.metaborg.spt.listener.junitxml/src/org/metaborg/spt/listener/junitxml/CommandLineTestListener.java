@@ -1,4 +1,4 @@
-package org.strategoxt.imp.testing.listener;
+package org.metaborg.spt.listener.junitxml;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,8 +8,9 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.metaborg.spt.listener.ITestReporter;
 
-public class CommandLineTestListener implements ITestListener {
+public class CommandLineTestListener implements ITestReporter {
 
 	// map testsuite filenames to the suites
 	private Map<String, TestSuite> testsuites;
@@ -19,14 +20,18 @@ public class CommandLineTestListener implements ITestListener {
 		testsuites = new HashMap<String, TestSuite>();
 	}
 
+	/**
+	 * @param testsuite the filename of the test suite to which this test case belongs
+	 * @param description the description of the test case (i.e. the name)
+	 */
 	@Override
-	public void addTestcase(String testsuite, String description, int offset)
+	public void addTestcase(String testsuite, String description)
 			throws Exception {
 		if (!testsuites.containsKey(testsuite)) {
 			throw new IllegalArgumentException("No such testsuite");
 		}
 		TestSuite suite = testsuites.get(testsuite);
-		suite.addTestCase(new TestCase(description, offset));
+		suite.addTestCase(new TestCase(description, 0));
 	}
 
 	@Override
@@ -49,16 +54,6 @@ public class CommandLineTestListener implements ITestListener {
 		TestCase tcase = suite.getTestCase(description);
 		tcase.finish(succeeded, messages);
 		printChange();
-	}
-
-	@Override
-	public void disableRefresh() throws Exception {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void enableRefresh() throws Exception {
-		// TODO Auto-generated method stub
 	}
 
 	private void printChange() {
