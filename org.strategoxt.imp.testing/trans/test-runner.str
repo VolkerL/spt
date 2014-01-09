@@ -68,9 +68,9 @@ strategies
   ; test-to-description => name
   ; testlistener-start-testcase(|testsuite, name)
   ; if errors := <check-error>tst ; not((id,[])) then
-      testlistener-finish-testcase(|testsuite, name, False())
+      testlistener-finish-testcase(|testsuite, name, False(), errors)
     else
-      testlistener-finish-testcase(|testsuite, name, True()) 
+      testlistener-finish-testcase(|testsuite, name, True(), []) 
     end
     
   test-to-description = 
@@ -82,7 +82,7 @@ strategies
   external testlistener-add-testsuite(|testsuite, filename)
   external testlistener-add-testcase(|testsuite, description, linenr)
   external testlistener-start-testcase(|testsuite, description)
-  external testlistener-finish-testcase(|testsuite, description, result)
+  external testlistener-finish-testcase(|testsuite, description, result, messages)
   external parse-spt-file(|)
     
   

@@ -10,11 +10,11 @@ import static org.spoofax.jsglr.client.imploder.ImploderAttachment.getRightToken
 import java.util.ArrayList;
 import java.util.List;
 
+import org.metaborg.sunshine.Environment;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.imploder.IToken;
 import org.spoofax.jsglr.client.imploder.ITokenizer;
-import org.spoofax.sunshine.Environment;
 import org.spoofax.sunshine.util.StrategoImpUtil;
 import org.spoofax.terms.TermVisitor;
 

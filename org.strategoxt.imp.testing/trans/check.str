@@ -117,6 +117,7 @@ rules
         ; debug(!"Invoked editor-init: ")
       ; where(spt-setup-isolate)
       ; input'     := (input, <InputFile>, <project-path>)
+      ; <debug(!"Observer: ")> <spt-get-observer>
       ; messages   := <plugin-strategy-invoke(|<Language>, <spt-get-observer>) <+ !([], [], [])> input'
       ; debug(!"got messages (empty might indicate failed observer call!): ")
       ; messages'  := <strip-and-record-analyzed-ast <+ reset-analyzed-ast(|input)> <try(?Some(<id>))> messages

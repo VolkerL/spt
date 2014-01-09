@@ -2,15 +2,12 @@ package org.strategoxt.imp.testing.listener;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
-
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class CommandLineTestListener implements ITestListener {
 
@@ -47,8 +44,10 @@ public class CommandLineTestListener implements ITestListener {
 
 	@Override
 	public void finishTestcase(String testsuite, String description,
-			boolean succeeded) throws Exception {
-		testsuites.get(testsuite).getTestCase(description).finish(succeeded);
+			boolean succeeded, Collection<String> messages) throws Exception {
+		TestSuite suite = testsuites.get(testsuite);
+		TestCase tcase = suite.getTestCase(description);
+		tcase.finish(succeeded, messages);
 		printChange();
 	}
 
@@ -65,16 +64,30 @@ public class CommandLineTestListener implements ITestListener {
 	private void printChange() {
 		for (TestSuite s : testsuites.values()) {
 			File output = new File(FilenameUtils.removeExtension(s.filename)
-					+ ".testreport");
+					+ ".sptreport.xml");
 			try {
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(output, s);
+//				ObjectMapper mapper = new ObjectMapper();
+//				mapper.writeValue(output, s);
+				FileWriter out = new FileWriter(output, false);
+				out.write(toJUnitXml(testsuites.values()));
+				out.close();
 			} catch (Exception | Error e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	private String toJUnitXml(Collection<TestSuite> ss) {
+		StringBuilder b = new StringBuilder();
+		b.append("<testsuites>\n");
+		for (TestSuite s : ss) {
+			b.append(s.toJUnitXml(1)).append('\n');
+		}
+		b.append("</testsuites>");
+		
+		return b.toString();
+	}
+	
 	private class TestSuite {
 		public String name;
 		public String filename;
@@ -96,7 +109,6 @@ public class CommandLineTestListener implements ITestListener {
 			return testcases.get(name);
 		}
 
-		@JsonGetter
 		public Collection<TestCase> getTestCases() {
 			return testcases.values();
 		}
@@ -113,6 +125,28 @@ public class CommandLineTestListener implements ITestListener {
 			}
 			return b.toString();
 		}
+		
+		public String toJUnitXml(int indent) {
+			StringBuilder b = new StringBuilder();
+			
+			int failures = 0;
+			for (TestCase c : testcases.values()) {
+				if (c.finished && !c.result) failures++;
+			}
+			
+			// no errors, just failures
+			indent(b, indent).append("<testsuite name=\"").append(name)
+			.append("\" tests=\"").append(testcases.size())
+			.append("\" failures=\"").append(failures).append("\">\n");
+			
+			for (TestCase c : testcases.values()) {
+				b.append(c.toJUnitXml(indent+1)).append('\n');
+			}
+			
+			indent(b, indent).append("</testsuite>");
+			
+			return b.toString();
+		}
 	}
 
 	private class TestCase {
@@ -122,6 +156,7 @@ public class CommandLineTestListener implements ITestListener {
 		public boolean finished;
 		public long start;
 		public long end;
+		public Collection<String> messages;
 
 		public TestCase(String name, int offset) {
 			this.name = name;
@@ -133,14 +168,47 @@ public class CommandLineTestListener implements ITestListener {
 			finished = false;
 		}
 
-		public void finish(boolean result) {
+		public void finish(boolean result, Collection<String> messages) {
 			if (!finished) {
 				end = System.currentTimeMillis();
+				this.messages = messages;
 				finished = true;
 				this.result = result;
 			} else {
 				throw new IllegalStateException("Already finished.");
 			}
 		}
+		
+		public String toJUnitXml(int indent) {
+			StringBuilder b = new StringBuilder();
+			indent(b, indent).append("<testcase name=\"").append(name).append("\"");
+			// TODO figure out if time should be the runtime and if so in microseconds or not
+			if (finished) b.append(" time=\"").append(end-start).append("\"");
+			b.append(">\n");
+			if (!finished) indent(b, indent + 1).append("<skipped type=\"Unknown\" />\n");
+			// we don't do errors, just failures
+			// TODO add the type and message of the failure
+			if (finished && !result) {
+				if (messages == null || messages.isEmpty()) {
+					indent(b, indent + 1).append("<failure type=\"UnknownFailure\" message=\"unknown cause\"/>\n");
+				} else {
+					for (String message : messages) {
+						indent(b, indent + 1).append("<failure type=\"UnknownFailure\" message=\"")
+						.append(StringEscapeUtils.escapeJava(StringEscapeUtils.escapeXml(message)))
+						.append("\"/>\n");
+					}
+				}
+			}
+			indent(b, indent).append("</testcase>");
+			
+			return b.toString();
+		}
+	}
+	
+	private StringBuilder indent(StringBuilder b, int i) {
+		for (int j = 0; j < i; j++) {
+			b.append('\t');
+		}
+		return b;
 	}
 }

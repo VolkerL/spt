@@ -3,6 +3,8 @@
  */
 package org.strategoxt.imp.testing.listener;
 
+import java.util.Collection;
+
 /**
  * @author vladvergu
  * 
@@ -19,7 +21,7 @@ public interface ITestListener {
 
 	void startTestcase(String testsuite, String description) throws Exception;
 
-	void finishTestcase(String testsuite, String description, boolean succeeded) throws Exception;
+	void finishTestcase(String testsuite, String description, boolean succeeded, Collection<String> messages) throws Exception;
 
 	void disableRefresh() throws Exception;
 

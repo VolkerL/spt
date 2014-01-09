@@ -13,6 +13,7 @@ import static org.spoofax.terms.attachments.ParentAttachment.getParent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.metaborg.sunshine.Environment;
 import org.spoofax.interpreter.terms.IStrategoConstructor;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.client.imploder.IToken;
@@ -20,7 +21,6 @@ import org.spoofax.jsglr.client.imploder.ITokenizer;
 import org.spoofax.jsglr.client.imploder.ImploderAttachment;
 import org.spoofax.jsglr.client.imploder.Token;
 import org.spoofax.jsglr.client.imploder.Tokenizer;
-import org.spoofax.sunshine.Environment;
 import org.spoofax.terms.TermVisitor;
 
 /** 

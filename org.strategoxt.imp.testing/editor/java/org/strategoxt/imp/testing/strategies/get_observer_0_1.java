@@ -1,9 +1,9 @@
 package org.strategoxt.imp.testing.strategies;
 
+import org.metaborg.sunshine.services.language.ALanguage;
+import org.metaborg.sunshine.services.language.LanguageService;
 import org.spoofax.interpreter.core.Tools;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.sunshine.services.language.ALanguage;
-import org.spoofax.sunshine.services.language.LanguageService;
 import org.strategoxt.lang.Context;
 import org.strategoxt.lang.Strategy;
 

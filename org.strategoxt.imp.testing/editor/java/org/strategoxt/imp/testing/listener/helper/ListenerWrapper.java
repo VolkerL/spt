@@ -6,6 +6,7 @@ package org.strategoxt.imp.testing.listener.helper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 
 import org.strategoxt.imp.testing.listener.CommandLineTestListener;
 import org.strategoxt.imp.testing.listener.ITestListener;
@@ -63,6 +64,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * 
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#reset()
 	 */
+	@Override
 	public void reset() throws SecurityException, NoSuchMethodException, IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException {
 
@@ -80,6 +82,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * 
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#addTestcase(java.lang.String, java.lang.String, int)
 	 */
+	@Override
 	public void addTestcase(String testsuite, String description, int offset) throws IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
 
@@ -96,6 +99,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * 
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#addTestsuite(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void addTestsuite(String name, String filename) throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException, SecurityException, NoSuchMethodException {
 
@@ -111,6 +115,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * 
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#startTestcase(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void startTestcase(String testsuite, String description) throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
@@ -128,16 +133,16 @@ public final class ListenerWrapper implements ITestListener {
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#finishTestcase(java.lang.String, java.lang.String,
 	 * boolean)
 	 */
-	public void finishTestcase(String testsuite, String description, boolean succeeded)
+	@Override
+	public void finishTestcase(String testsuite, String description, boolean succeeded, Collection<String> messages)
 			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException,
 			NoSuchMethodException {
 
 		Object wrapped = getWrapped();
 		Method m = wrapped.getClass().getMethod("finishTestcase",
-				new Class[] { String.class, String.class, boolean.class });
+				new Class[] { String.class, String.class, boolean.class, Collection.class });
 		if (!Modifier.isAbstract(m.getModifiers())) {
-			m.invoke(wrapped, testsuite, description, succeeded);
-
+			m.invoke(wrapped, testsuite, description, succeeded, messages);
 		}
 	}
 
@@ -146,6 +151,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * 
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#disableRefresh()
 	 */
+	@Override
 	public void disableRefresh() {
 		// the test provider doesn't use this hack
 	}
@@ -155,6 +161,7 @@ public final class ListenerWrapper implements ITestListener {
 	 * 
 	 * @see org.strategoxt.imp.testing.listener.ITestListener#enableRefresh()
 	 */
+	@Override
 	public void enableRefresh() {
 		// the test provider doesn't use this hack
 	}
