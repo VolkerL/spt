@@ -24,7 +24,6 @@ Require-Bundle: org.strategoxt.imp.runtime,
  org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.strategoxt.imp.testing,
- org.strategoxt.imp.testing.listener
+Export-Package: org.strategoxt.imp.testing
 Bundle-Vendor: Spoofax.org
 
