@@ -18,7 +18,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		System.out.println("CALLING DEFAULTS....");
 		IPreferenceStore store = PlatformUI.getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_LISTENER_ID, DEFAULT_LISTENER_ID);
 	}

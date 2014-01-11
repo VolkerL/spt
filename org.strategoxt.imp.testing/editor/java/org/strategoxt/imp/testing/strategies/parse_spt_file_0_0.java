@@ -36,12 +36,8 @@ public class parse_spt_file_0_0 extends Strategy {
 		String filename = ((IStrategoString) current).stringValue();
 		File file = new File(filename);
 
-		System.out.println("\n\n\nPARSE_FILE START\n");
-		
 		ALanguage l = LanguageService.INSTANCE().getLanguageByName(
 				"Spoofax-Testing");
-		
-		System.out.println("Obtained language: "+l.getName());
 		
 		IParserConfig c = new ParserConfig(l.getStartSymbol(),
 				l.getParseTableProvider(), 24 * 1000);
@@ -49,12 +45,9 @@ public class parse_spt_file_0_0 extends Strategy {
 		SpoofaxTestingJSGLRI parser = new SpoofaxTestingJSGLRI(p);
 		parser.setUseRecovery(false);
 		
-		System.out.println("Created parser.");
 		
 		try {
 			IStrategoTerm res = parser.actuallyParse(FileUtils.readFileToString(file), filename);
-			System.out.println(res);
-			System.out.println("\nPARSE_FILE END\n\n");
 			return res;
 		} catch (SGLRException | InterruptedException | IOException e) {
 			// TODO Auto-generated catch block

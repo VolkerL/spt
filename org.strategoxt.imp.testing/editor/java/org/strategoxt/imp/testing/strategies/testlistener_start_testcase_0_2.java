@@ -26,12 +26,8 @@ public class testlistener_start_testcase_0_2 extends Strategy {
 		String desc = ((IStrategoString) arg1).stringValue();
 
 		try {
-//			ITestListener listener = ListenerWrapper.instance();
-//			listener.startTestcase(ts, desc);
 			Iterator<ITestReporter> it = TestReporterProvider.getInstance().getReporters();
-			System.out.println("\n--------------------------\nWOOOO\n"+it+"\nOOOOW\n-------------------");
 			while (it != null && it.hasNext()) {
-				System.out.println("\n--------------------------\nWOOOO\nnext\nOOOOW\n-------------------");
 				it.next().startTestcase(ts, desc);
 			}
 		} catch (Exception e) {

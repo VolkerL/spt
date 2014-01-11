@@ -25,13 +25,9 @@ rules
   check-error:
     Test(_, _, input{a*}, expectations) -> error*
     where
-      debug(!"Resolving check-error called : ");
       !a* => [ast | selections];
-      debug(!"Annotations : ");
       reference* := <collect-all(?Numbered(_) + ?Unnumbered(), conc)> expectations;
-      debug(!"REFERENCES : ");
       error*     := <filter(check-selection(|selections))> reference*;
-      debug(!"ERRORS: ");
       not([])
   
   check-selection(|selections):
@@ -51,10 +47,8 @@ rules
   check-expectation(|ast, selections, messages) :
     ResolveTo(from, to) -> error
     where
-      debug(!"Checking expectations of ResolveTo: ");
       from' := <resolve-selection(|selections)> from;
-      to'   := <resolve-selection(|selections)> to;
-      debug(!"Resolved from and to: ")
+      to'   := <resolve-selection(|selections)> to
     with
       input1    := <get-service-input-term> from';
       input2    := <get-service-input-term-without-ancestor> from';

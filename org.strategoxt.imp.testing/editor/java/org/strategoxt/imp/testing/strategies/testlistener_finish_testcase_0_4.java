@@ -40,8 +40,6 @@ public class testlistener_finish_testcase_0_4 extends Strategy {
 			}
 		}
 		
-//		System.out.println("FINISHED: "+ts+", "+desc+", RESULT: "+appl);
-
 		try {
 //			ITestListener listener = ListenerWrapper.instance();
 //			if (appl.equals("True"))

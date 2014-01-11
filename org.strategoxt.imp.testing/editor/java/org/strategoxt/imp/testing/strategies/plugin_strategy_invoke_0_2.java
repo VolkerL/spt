@@ -38,7 +38,6 @@ public class plugin_strategy_invoke_0_2 extends Strategy {
 				asJavaString(languageName));
 		HybridInterpreter runtime = RuntimeService.INSTANCE().getRuntime(lang);
 
-//		System.out.println("Doing stuff with " + strategy);
 		// strategy should be a String
 		if (isTermAppl(strategy) && ((IStrategoAppl) strategy).getName().equals("Strategy"))
 			strategy = termAt(strategy, 0);
@@ -50,33 +49,26 @@ public class plugin_strategy_invoke_0_2 extends Strategy {
 		// how should we log the exception?
 		try {
 			if (runtime.invoke(asJavaString(strategy))) {
-//				System.out.println("\n\nWOOPWOOP I invoked "+asJavaString(strategy)+"\n\n");
 				current = runtime.current();
 				current = factory.makeAppl(factory.makeConstructor("Some", 1), current);
-//				System.out.println("Returning " + current);
 				return current;
 			} else {
 				Context foreignContext = runtime.getCompiledContext();
 				String trace = "rewriting failed\n"
 						+ (foreignContext != null ? foreignContext.getTraceString() : "");
-				System.out.println("WOOPSIE " + trace);
 				return factory.makeAppl(factory.makeConstructor("Fail", 1), factory.makeString(trace));
 			}
 		} catch (UndefinedStrategyException e) {
-			System.out.println("WOOPSIE-CATCH Undefined strategy");
 			return factory.makeAppl(
 					factory.makeConstructor("Error", 1),
 					factory.makeString("Problem executing foreign strategy for testing: "
 							+ e.getLocalizedMessage()));
 		}  catch (InterpreterException e) {
-			System.out.println("WOOPSIE-CATCH Interpreter exception");
-			e.printStackTrace();
 //			Environment.logException("Problem executing strategy for testing: "
 //					+ strategy, e);
 			return factory.makeAppl(factory.makeConstructor("Error", 1),
 					factory.makeString(e.getLocalizedMessage()));
 		} catch (RuntimeException e) {
-			System.out.println("WOOPSIE-CATCH Runtime exception");
 //			Environment.logException("Problem executing strategy for testing: "
 //					+ strategy, e);
 			return factory.makeAppl(
