@@ -19,7 +19,7 @@ Note that this README is branch specific.
 #### Setting up Sunshine
 To start using SPT in combination with Sunshine
 you will need the [appropriate Sunshine version](https://github.com/VolkerL/spoofax-sunshine).
-Open the `org.spoofax.sunshine` project in Eclipse.
+Open the `org.metaborg.sunshine` project in Eclipse.
 If the libraries are not on the Github repo, please make a Github issue there to remind me.
 Some dependencies would otherwise have to be obtained from an Eclipse instance's plugin folder,
 so having them in the repo itself should be easier for now.
@@ -71,10 +71,10 @@ here is how to do so:
 ```Shell
 java
   -cp "<path to sunshine jar>:<path to org.metaborg.listener jar>"
-  org.spoofax.sunshine.drivers.Main
+  org.metaborg.sunshine.drivers.Main
   --auto-lang path-to-repo/org.strategoxt.imp.testing
   --project path-to-directory-with-test-cases/
-  --builder test-runner-file
+  --builder testrunnerfile
   --build-on testcase.spt
   --no-analysis
 ```
@@ -92,13 +92,15 @@ Sunshine options explained:
 - *project* - This option specifies the project path.
   In this case it is the path to the project that hosts your SPT test cases.
 - *builder* - Specifies which builder should be executed on the test cases.
-  I picked `test-runner-file` as that is the only one I tested so far.
+  I picked `testrunnerfile` as that is the only one I tested so far.
   This builder runs the testcases in the given file.
+
+  *Note:* The builder name is not the strategy name, but the name as appears in the menu!
 - *build-on* - This is how you tell Sunshine on what file the builder should be run.
   If your testcase is located in the root of your `project` and called `testcase.spt`
   then you don't have to change anything here.
   If you want to run multiple files at once, that might be possible with the `build-on-all` option,
-  but I didn't test that yet.
+  but I didn't test that yet. This `build-on-all` takes a path to a folder (relative to the `project`) and will build on all files in that folder. 
 - *no-analysis* - As Sunshine expects the observer strategy of your language to be able to handle a list of files
   and SPT does not yet handle that, analysis would fail.
   The hardcore SPT developer might be interested to know that the current use of Dynamic Rules
