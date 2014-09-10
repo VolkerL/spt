@@ -111,6 +111,9 @@ The output should start appearing on your screen.
 At the moment it should just be a bunch of logging from Sunshine,
 mixed with a lot of debug stuff from `debug` and `println` statements in SPT.
 
+*Note:* Please remember to delete the `.cache` directory that Sunshine creates in your `--project` folder.
+If you don't delete it, your next run will probably not do anything (unless you changed the language files... maybe).
+
 #### Getting proper output
 
 To get proper test results you can do two things:

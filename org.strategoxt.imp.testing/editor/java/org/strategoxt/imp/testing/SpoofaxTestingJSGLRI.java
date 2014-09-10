@@ -130,21 +130,21 @@ public class SpoofaxTestingJSGLRI extends JSGLRI {
 						retokenizer.skipTokensUpToIndex(oldFragmentEndIndex);
 					} catch (IOException e) {
 						e.printStackTrace();
-						LOG.error("Could not parse tested code fragment", e);
+						LOG.error("Could not parse tested code fragment (IOE)", e);
 					} catch (SGLRException e) {
 						// TODO: attach ErrorMessage(_) term with error?
 						e.printStackTrace();
-						LOG.error("Could not parse tested code fragment", e);
+						LOG.error("Could not parse tested code fragment (SGLRE)", e);
 					} catch (CloneNotSupportedException e) {
 						e.printStackTrace();
-						LOG.error("Could not parse tested code fragment", e);
+						LOG.error("Could not parse tested code fragment(CNSE)", e);
 					} catch (RuntimeException e) {
 						e.printStackTrace();
-						LOG.error("Could not parse tested code fragment", e);
+						LOG.error("Could not parse tested code fragment(RE)", e);
 					} catch (InterruptedException e) {
 						// TODO: attach ErrorMessage(_) term with error?
 						e.printStackTrace();
-						LOG.error("Could not parse tested code fragment", e);
+						LOG.error("Could not parse tested code fragment(IE)", e);
 					}
 				}
 				return term;

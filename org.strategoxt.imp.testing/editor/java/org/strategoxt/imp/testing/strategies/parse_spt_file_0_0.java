@@ -48,6 +48,7 @@ public class parse_spt_file_0_0 extends Strategy {
 		
 		try {
 			IStrategoTerm res = parser.actuallyParse(FileUtils.readFileToString(file), filename);
+			System.out.println("PARSE RESULT: " + res.toString());
 			return res;
 		} catch (SGLRException | InterruptedException | IOException e) {
 			// TODO Auto-generated catch block
